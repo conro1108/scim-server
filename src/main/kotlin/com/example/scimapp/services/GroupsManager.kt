@@ -1,10 +1,8 @@
 package com.example.scimapp.services
 
 import com.example.scimapp.api.groups.ScimGroupDTO
-import com.example.scimapp.api.users.ScimUserDTO
 import com.example.scimapp.persistence.GroupRepository
 import com.example.scimapp.persistence.ScimGroup
-import com.example.scimapp.persistence.ScimUser
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import java.util.*

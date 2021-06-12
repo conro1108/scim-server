@@ -1,8 +1,10 @@
-package com.example.scimapp.api
+package com.example.scimapp.api.users
 
+import com.example.scimapp.api.ResourceNotFoundException
 import com.example.scimapp.persistence.ScimUser
 import com.example.scimapp.services.UsersManager
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 class UsersController(private val manager: UsersManager) {
@@ -13,7 +15,7 @@ class UsersController(private val manager: UsersManager) {
     }
 
     @GetMapping("/Users/{id}")
-    fun getUser(@PathVariable id: Long): ScimUser {
+    fun getUser(@PathVariable id: UUID): ScimUser {
         return manager.getUser(id) ?: throw ResourceNotFoundException()
     }
 

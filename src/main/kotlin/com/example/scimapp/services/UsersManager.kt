@@ -1,10 +1,11 @@
 package com.example.scimapp.services
 
-import com.example.scimapp.api.ScimUserDTO
+import com.example.scimapp.api.users.ScimUserDTO
 import com.example.scimapp.persistence.ScimUser
 import com.example.scimapp.persistence.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class UsersManager(private val repository: UserRepository) {
@@ -17,7 +18,7 @@ class UsersManager(private val repository: UserRepository) {
         return repository.save(ScimUser(dto))
     }
 
-    fun getUser(id: Long): ScimUser? {
+    fun getUser(id: UUID): ScimUser? {
         return repository.findByIdOrNull(id)
     }
 }

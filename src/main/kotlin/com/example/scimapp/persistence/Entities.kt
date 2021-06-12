@@ -1,7 +1,10 @@
 package com.example.scimapp.persistence
 
-import com.example.scimapp.api.ScimUserDTO
+import com.example.scimapp.api.groups.ScimGroupDTO
+import com.example.scimapp.api.users.ScimUserDTO
+import org.hibernate.id.SequenceGenerator.SEQUENCE
 import java.time.LocalDateTime
+import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -10,7 +13,8 @@ class ScimUser(
     var name: String,
     var active: Boolean,
     var externalId: String,
-    @Id @GeneratedValue var id: Long? = null,
+    @OneToMany var memberships: List<GroupMembership>? = emptyList(),
+    @Id @GeneratedValue(generator = SEQUENCE) var id: UUID? = null,
     var lastUpdate: LocalDateTime = LocalDateTime.now()
 ) {
     constructor(dto: ScimUserDTO) :
@@ -19,9 +23,9 @@ class ScimUser(
 
 @Entity
 class GroupMembership(
-    @ManyToOne var user: ScimUser,
-    @ManyToOne var group: ScimGroup,
-    @Id @GeneratedValue var id: Long? = null
+    var user: ScimUser,
+    var group: ScimGroup,
+    @Id @GeneratedValue var id: UUID? = null
 )
 
 @Entity
@@ -29,6 +33,10 @@ class ScimGroup(
     var groupName: String,
     var groupDescription: String? = null,
     var externalId: String,
-    @Id @GeneratedValue var id: Long? = null,
+    @OneToMany var memberships: List<GroupMembership>? = emptyList(),
+    @Id @GeneratedValue(generator = SEQUENCE) var id: UUID? = null,
     var lastUpdate: LocalDateTime = LocalDateTime.now()
-)
+) {
+    constructor(dto: ScimGroupDTO) :
+            this(dto.groupName, dto.groupDescription, dto.externalId, dto.memberships)
+}

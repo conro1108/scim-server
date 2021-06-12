@@ -14,7 +14,7 @@ class ScimUser(
     var active: Boolean,
     var externalId: String,
     @OneToMany var memberships: List<GroupMembership>? = emptyList(),
-    @Id @GeneratedValue(generator = SEQUENCE) var id: UUID? = null,
+    @Id @GeneratedValue var id: UUID? = null,
     var lastUpdate: LocalDateTime = LocalDateTime.now()
 ) {
     constructor(dto: ScimUserDTO) :
@@ -34,7 +34,7 @@ class ScimGroup(
     var groupDescription: String? = null,
     var externalId: String,
     @OneToMany var memberships: List<GroupMembership>? = emptyList(),
-    @Id @GeneratedValue(generator = SEQUENCE) var id: UUID? = null,
+    @Id @GeneratedValue var id: UUID? = null,
     var lastUpdate: LocalDateTime = LocalDateTime.now()
 ) {
     constructor(dto: ScimGroupDTO) :

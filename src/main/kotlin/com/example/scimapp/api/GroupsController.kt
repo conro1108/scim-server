@@ -1,9 +1,7 @@
-package com.example.scimapp.api.groups
+package com.example.scimapp.api
 
-import com.example.scimapp.api.ResourceNotFoundException
-import com.example.scimapp.api.users.ScimUserDTO
+import com.example.scimapp.ResourceNotFoundException
 import com.example.scimapp.persistence.ScimGroup
-import com.example.scimapp.persistence.ScimUser
 import com.example.scimapp.services.GroupsManager
 import org.springframework.web.bind.annotation.*
 import java.util.*

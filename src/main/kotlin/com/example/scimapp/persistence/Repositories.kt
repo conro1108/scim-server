@@ -7,5 +7,4 @@ interface UserRepository: PagingAndSortingRepository<ScimUser, Long> {
 }
 
 interface GroupRepository: PagingAndSortingRepository<ScimGroup, Long> {
-
 }

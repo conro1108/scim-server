@@ -1,5 +1,6 @@
 package com.example.scimapp.api
 
+import com.example.scimapp.ScimName
 import java.util.*
 
 data class GroupMembershipDTO (
@@ -16,7 +17,7 @@ data class ScimGroupDTO (
 
 data class ScimUserDTO (
     val userName: String,
-    val name: String,
+    val name: ScimName,
     val active: Boolean,
     val externalId: String,
     val groups: List<UUID>

@@ -16,7 +16,7 @@ class ScimUser(
 
     @JsonBackReference
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    var groups: MutableSet<ScimGroup>,
+    var groups: MutableSet<ScimGroup> = mutableSetOf(),
 
     var userName: String,
     var name: String,
@@ -24,13 +24,14 @@ class ScimUser(
     var externalId: String,
     var lastUpdate: LocalDateTime = LocalDateTime.now()
 ) {
-    // ideally we would just not even attempt to update memberships if not passed in
-    constructor(dto: ScimUserDTO, members: MutableSet<ScimGroup> = mutableSetOf()) :
+    constructor(dto: ScimUserDTO) :
             this(userName = dto.userName,
-                name = dto.name,
+                // todo validate input
+                //  ( full || (first && last) ) && (full == first + middle? + last)
+                name = dto.name.full ?: (dto.name.first + (dto.name.middle ?: "") + dto.name.last),
                 active = dto.active,
-                externalId = dto.externalId,
-                groups = members)
+                externalId = dto.externalId
+            )
 }
 
 @Entity
@@ -48,7 +49,8 @@ class ScimGroup(
     var externalId: String,
     var lastUpdate: LocalDateTime = LocalDateTime.now()
 ) {
-    // ideally we would just not even attempt to update memberships if not passed in
+    // ideally we would just not even attempt to update memberships if not passed in - prefer
+    // to leave membership changes explicit rather than implicit
     constructor(dto: ScimGroupDTO, members: MutableSet<ScimUser> = mutableSetOf()) :
             this(groupName = dto.groupName,
                 groupDescription = dto.groupDescription,

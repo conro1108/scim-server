@@ -1,15 +1,14 @@
 package com.example.scimapp.persistence.user
 
-import com.example.scimapp.ResourceNotFoundException
+import com.example.scimapp.api.group.GroupMembership
 import com.example.scimapp.api.user.Email
 import com.example.scimapp.api.user.Name
 import com.example.scimapp.api.user.ScimUser
-import com.example.scimapp.api.user.UserGroupMembership
-import com.example.scimapp.persistence.Group
+import com.example.scimapp.persistence.group.Group
+import com.example.scimapp.services.ResourceNotFoundException
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
-import kotlin.streams.toList
 
 @Entity
 class User(
@@ -29,7 +28,7 @@ class User(
 
     var active: Boolean,
     var externalId: String?,
-    var lastUpdate: LocalDateTime = LocalDateTime.now()
+    var lastUpdate: LocalDateTime = LocalDateTime.now(),
 ) {
     constructor(dto: ScimUser) :
             this(
@@ -40,29 +39,28 @@ class User(
                 name = dto.name?.formatted ?: listOfNotNull(
                     dto.name?.givenName,
                     dto.name?.middleName,
-                    dto.name?.familyName
+                    dto.name?.familyName,
                 ).joinToString(separator = " "),
 
                 // todo validate primary exists (or 0-1 exist)
                 email = dto.findPrimaryEmail().toEmailData(),
                 active = dto.active ?: false,
-                externalId = dto.externalId
+                externalId = dto.externalId,
             )
 
     fun toScimUser(): ScimUser {
         return ScimUser(
+            id = this.id,
             userName = this.userName,
             name = Name(formatted = this.name),
             emails = listOf(this.email.toEmail()),
             active = this.active,
             externalId = this.externalId,
-            groups = this.groups.parallelStream()
-                .map { UserGroupMembership(
+            groups = this.groups.map { GroupMembership(
                     value = it.id ?: throw ResourceNotFoundException(),
                     ref = "base_url/Groups/" + it.id,
-                    display = it.groupName
-                ) }.toList(),
-
+                    display = it.groupName,
+                    ) },
             )
     }
 }

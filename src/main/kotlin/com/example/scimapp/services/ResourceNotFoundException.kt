@@ -1,4 +1,4 @@
-package com.example.scimapp
+package com.example.scimapp.services
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus

@@ -1,7 +1,7 @@
 package com.example.scimapp.persistence
 
 import com.example.scimapp.api.ScimGroupDTO
-import com.example.scimapp.api.ScimUserDTO
+import com.example.scimapp.api.user.ScimUserDTO
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import java.time.LocalDateTime

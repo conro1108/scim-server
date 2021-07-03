@@ -1,6 +1,6 @@
 package com.example.scimapp.api.user
 
-import com.example.scimapp.persistence.EmailData
+import com.example.scimapp.persistence.user.EmailData
 import java.util.*
 
 class ScimUser (
@@ -25,10 +25,10 @@ data class UserGroupMembership (
 )
 
 data class Name (
-    val first: String? = null,
-    val middle: String? = null,
-    val last: String? = null,
-    val full: String? = null
+    val givenName: String? = null,
+    val middleName: String? = null,
+    val familyName: String? = null,
+    val formatted: String? = null
 )
 
 data class Email (

@@ -1,5 +1,6 @@
 package com.example.scimapp.persistence
 
+import com.example.scimapp.persistence.user.User
 import org.springframework.data.repository.PagingAndSortingRepository
 import java.util.*
 

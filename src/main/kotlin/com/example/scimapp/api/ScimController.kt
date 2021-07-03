@@ -3,7 +3,6 @@ package com.example.scimapp.api
 import com.example.scimapp.ResourceNotFoundException
 import com.example.scimapp.api.user.ScimUser
 import com.example.scimapp.persistence.Group
-import com.example.scimapp.persistence.User
 import com.example.scimapp.services.ScimResourceManager
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -12,12 +11,12 @@ import java.util.*
 class ScimController(private val scimResourceManager: ScimResourceManager) {
 
     @GetMapping(URIPaths.USERS)
-    fun getUsers(): List<User> {
+    fun getUsers(): List<ScimUser> {
         return scimResourceManager.getUsers()
     }
 
     @GetMapping(URIPaths.USERS_ID)
-    fun getUser(@PathVariable id: UUID): User {
+    fun getUser(@PathVariable id: UUID): ScimUser {
         return scimResourceManager.getUser(id) ?: throw ResourceNotFoundException()
     }
 

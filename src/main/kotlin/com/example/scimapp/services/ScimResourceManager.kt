@@ -33,9 +33,9 @@ class ScimResourceManager(private val userRepository: UserRepository, val groupR
         // if members passed, fetch user entities from db to persist memberships thru JPA
         // todo this is aggressively stupid we just need to write to memberships table
         // but on the other hand, this way we know that passed ids are indeed users in our db..
-        dto.members?.let {
-            val users: MutableSet<User> = userRepository.findAllById(
-                it.map { member -> member.value }
+        dto.members?.let { members ->
+            val users = userRepository.findAllById(
+                members.map { it.value }
             ).toMutableSet()
             return groupRepository.save(Group(dto, users)).toScimGroup()
         }

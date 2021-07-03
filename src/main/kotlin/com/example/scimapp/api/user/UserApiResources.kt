@@ -1,6 +1,7 @@
 package com.example.scimapp.api.user
 
 import com.example.scimapp.persistence.user.EmailData
+import com.fasterxml.jackson.annotation.JsonInclude
 import java.util.*
 
 class ScimUser (
@@ -24,6 +25,7 @@ data class UserGroupMembership (
     val display: String
 )
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class Name (
     val givenName: String? = null,
     val middleName: String? = null,

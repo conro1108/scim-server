@@ -34,10 +34,15 @@ class User(
     constructor(dto: ScimUser) :
             this(
                 userName = dto.userName,
+
                 // todo validate input
                 //  ( full || (first && last) ) && (full == first + middle? + last)
-                name = dto.name?.formatted ?:
-                (dto.name?.givenName + (dto.name?.middleName ?: "") + dto.name?.familyName),
+                name = dto.name?.formatted ?: listOfNotNull(
+                    dto.name?.givenName,
+                    dto.name?.middleName,
+                    dto.name?.familyName
+                ).joinToString(separator = " "),
+
                 // todo validate primary exists (or 0-1 exist)
                 email = dto.findPrimaryEmail().toEmailData(),
                 active = dto.active ?: false,

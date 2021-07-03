@@ -19,17 +19,26 @@ class ScimUser(
     var groups: MutableSet<ScimGroup> = mutableSetOf(),
 
     var userName: String,
+    // only store & return full name, but arbitrary input handled in API
     var name: String,
+    // only handle primary email
+    var email: String?,
+    var emailType: String?,
+
     var active: Boolean,
-    var externalId: String,
+    var externalId: String?,
     var lastUpdate: LocalDateTime = LocalDateTime.now()
 ) {
     constructor(dto: ScimUserDTO) :
-            this(userName = dto.userName,
+            this(
+                userName = dto.userName,
                 // todo validate input
                 //  ( full || (first && last) ) && (full == first + middle? + last)
-                name = dto.name.full ?: (dto.name.first + (dto.name.middle ?: "") + dto.name.last),
-                active = dto.active,
+                name = dto.name?.full ?: (dto.name?.first + (dto.name?.middle ?: "") + dto.name?.last),
+                // todo validate primary exists (or 0-1 exist)
+                email = dto.findPrimaryEmail()?.value,
+                emailType = dto.findPrimaryEmail()?.type,
+                active = dto.active ?: false,
                 externalId = dto.externalId
             )
 }

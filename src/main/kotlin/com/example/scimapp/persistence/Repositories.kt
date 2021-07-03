@@ -3,6 +3,6 @@ package com.example.scimapp.persistence
 import org.springframework.data.repository.PagingAndSortingRepository
 import java.util.*
 
-interface UserRepository: PagingAndSortingRepository<ScimUser, UUID>
+interface UserRepository: PagingAndSortingRepository<User, UUID>
 
-interface GroupRepository: PagingAndSortingRepository<ScimGroup, UUID>
+interface GroupRepository: PagingAndSortingRepository<Group, UUID>

@@ -1,6 +1,7 @@
 package com.example.scimapp.api
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import org.springframework.data.domain.Page
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ListResponse<T>(
@@ -8,11 +9,19 @@ data class ListResponse<T>(
     val totalResults: Int,
     val startIndex: Int? = null,
     val itemsPerPage: Int? = null,
-    val Resources: List<T> = emptyList()
+    val resources: List<T> = emptyList()
 ) {
     constructor(resources: List<T>) :
             this (
                 totalResults = resources.size,
-                Resources = resources
+                resources = resources
+            )
+
+    constructor(resources: Page<T>) :
+            this (
+                totalResults = resources.numberOfElements,
+                startIndex = resources.pageable.offset.toInt() + 1,
+                itemsPerPage = resources.content.size,
+                resources = resources.content
             )
 }

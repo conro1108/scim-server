@@ -11,8 +11,11 @@ import java.util.*
 class ScimController(private val scimResourceManager: ScimResourceManager) {
 
     @GetMapping(URIPaths.USERS)
-    fun getUsers(): ListResponse<ScimUser> {
-        return ListResponse(scimResourceManager.getUsers())
+    fun getUsers(
+        @RequestParam(required = false) startIndex: Int?,
+        @RequestParam(required = false) count: Int?
+        ): ListResponse<ScimUser> {
+        return scimResourceManager.getUsers(startIndex, count)
     }
 
     @GetMapping(URIPaths.USERS_ID)

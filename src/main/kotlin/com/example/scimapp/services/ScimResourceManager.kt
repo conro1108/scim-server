@@ -1,5 +1,7 @@
 package com.example.scimapp.services
 
+import com.example.scimapp.api.ChunkRequest
+import com.example.scimapp.api.ListResponse
 import com.example.scimapp.api.group.ScimGroup
 import com.example.scimapp.api.user.ScimUser
 import com.example.scimapp.persistence.GroupRepository
@@ -13,10 +15,18 @@ import java.util.*
 @Component
 class ScimResourceManager(private val userRepository: UserRepository, val groupRepository: GroupRepository) {
 
-    fun getUsers(): List<ScimUser> {
-        return userRepository.findAll().map { it.toScimUser() }
+    fun getUsers(): ListResponse<ScimUser> {
+        return ListResponse(userRepository.findAll().map { it.toScimUser() })
     }
 
+    fun getUsers(startIndex: Int?, count: Int?): ListResponse<ScimUser> {
+        startIndex?.let { startIdx -> count?.let { count ->
+            // -1 because scim pag is 1-indexed
+            return ListResponse(userRepository.findAll(ChunkRequest(count, startIdx - 1))
+                .map { it.toScimUser() })
+        } }
+        return ListResponse(userRepository.findAll().map { it.toScimUser() })
+    }
     fun addUser(dto: ScimUser): ScimUser {
         return userRepository.save(User(dto)).toScimUser()
     }

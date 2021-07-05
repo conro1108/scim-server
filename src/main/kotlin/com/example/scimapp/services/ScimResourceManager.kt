@@ -15,18 +15,17 @@ import java.util.*
 @Component
 class ScimResourceManager(private val userRepository: UserRepository, val groupRepository: GroupRepository) {
 
-    fun getUsers(): ListResponse<ScimUser> {
-        return ListResponse(userRepository.findAll().map { it.toScimUser() })
-    }
-
     fun getUsers(startIndex: Int?, count: Int?): ListResponse<ScimUser> {
         startIndex?.let { startIdx -> count?.let { count ->
             // -1 because scim pag is 1-indexed
-            return ListResponse( userRepository.findAll(ChunkRequest(count, startIdx - 1))
-                .map { it.toScimUser() })
+            return ListResponse(
+                userRepository.findAll(ChunkRequest(count, startIdx - 1))
+                    .map { it.toScimUser() }
+            )
         } }
         return ListResponse(userRepository.findAll().map { it.toScimUser() })
     }
+
     fun addUser(dto: ScimUser): ScimUser {
         return userRepository.save(User(dto)).toScimUser()
     }
@@ -37,6 +36,18 @@ class ScimResourceManager(private val userRepository: UserRepository, val groupR
 
     fun getGroups(): List<ScimGroup> {
         return groupRepository.findAll().map { it.toScimGroup() }
+    }
+
+    fun
+            getGroups(startIndex: Int?, count: Int?): ListResponse<ScimGroup> {
+        startIndex?.let { startIdx -> count?.let { count ->
+            // -1 because scim pag is 1-indexed
+            return ListResponse(
+                groupRepository.findAll(ChunkRequest(count, startIdx - 1))
+                    .map { it.toScimGroup() }
+            )
+        } }
+        return ListResponse(groupRepository.findAll().map { it.toScimGroup() })
     }
 
     fun addGroup(dto: ScimGroup): ScimGroup {

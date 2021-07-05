@@ -29,8 +29,11 @@ class ScimController(private val scimResourceManager: ScimResourceManager) {
     }
 
     @GetMapping(URIPaths.GROUPS)
-    fun getGroups(): ListResponse<ScimGroup> {
-        return ListResponse(scimResourceManager.getGroups())
+    fun getGroups(
+        @RequestParam(required = false) startIndex: Int?,
+        @RequestParam(required = false) count: Int?
+    ): ListResponse<ScimGroup> {
+        return scimResourceManager.getGroups(startIndex, count)
     }
 
     @GetMapping(URIPaths.GROUPS_ID)

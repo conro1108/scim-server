@@ -19,7 +19,7 @@ data class ListResponse<T>(
 
     constructor(resources: Page<T>) :
             this (
-                totalResults = resources.numberOfElements,
+                totalResults = resources.totalElements.toInt(),
                 startIndex = resources.pageable.offset.toInt() + 1,
                 itemsPerPage = resources.content.size,
                 resources = resources.content

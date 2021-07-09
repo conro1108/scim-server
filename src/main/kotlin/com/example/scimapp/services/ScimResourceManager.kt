@@ -30,16 +30,18 @@ class ScimResourceManager(private val userRepository: UserRepository, val groupR
         return userRepository.save(User(dto)).toScimUser()
     }
 
-    fun getUser(id: UUID): ScimUser? {
-        return userRepository.findByIdOrNull(id)?.toScimUser()
+    fun getUser(id: UUID): ScimUser {
+        return userRepository.findByIdOrNull(id)?.toScimUser() ?: throw ResourceNotFoundException()
     }
 
-    fun getGroups(): List<ScimGroup> {
-        return groupRepository.findAll().map { it.toScimGroup() }
+    fun replaceUser(id: UUID, scimUser: ScimUser): ScimUser {
+        val dbUser = userRepository.findByIdOrNull(id) ?: throw ResourceNotFoundException()
+        return userRepository.save(
+            User(scimUser).apply { this.id = dbUser.id }
+        ).toScimUser()
     }
 
-    fun
-            getGroups(startIndex: Int?, count: Int?): ListResponse<ScimGroup> {
+    fun getGroups(startIndex: Int?, count: Int?): ListResponse<ScimGroup> {
         startIndex?.let { startIdx -> count?.let { count ->
             // -1 because scim pag is 1-indexed
             return ListResponse(
@@ -52,7 +54,7 @@ class ScimResourceManager(private val userRepository: UserRepository, val groupR
 
     fun addGroup(dto: ScimGroup): ScimGroup {
         // if members passed, fetch user entities from db to persist memberships thru JPA
-        // todo this is aggressively stupid we just need to write to memberships table
+        // todo this seems a lil dumb we just need to write to memberships table
         // but on the other hand, this way we know that passed ids are indeed users in our db..
         dto.members?.let { members ->
             val users = userRepository.findAllById(
@@ -63,7 +65,14 @@ class ScimResourceManager(private val userRepository: UserRepository, val groupR
         return groupRepository.save(Group(dto)).toScimGroup()
     }
 
-    fun getGroup(id: UUID): ScimGroup? {
-        return groupRepository.findByIdOrNull(id)?.toScimGroup()
+    fun replaceGroup(id: UUID, scimGroup: ScimGroup): ScimGroup {
+        var dbGroup = groupRepository.findByIdOrNull(id) ?: throw ResourceNotFoundException()
+        return groupRepository.save(
+            Group(scimGroup).apply { this.id = dbGroup.id }
+        ).toScimGroup()
+    }
+
+    fun getGroup(id: UUID): ScimGroup {
+        return groupRepository.findByIdOrNull(id)?.toScimGroup() ?: throw ResourceNotFoundException()
     }
 }

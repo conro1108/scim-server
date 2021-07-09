@@ -2,7 +2,6 @@ package com.example.scimapp.api
 
 import com.example.scimapp.api.group.ScimGroup
 import com.example.scimapp.api.user.ScimUser
-import com.example.scimapp.services.ResourceNotFoundException
 import com.example.scimapp.services.ScimResourceManager
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -20,7 +19,15 @@ class ScimController(private val scimResourceManager: ScimResourceManager) {
 
     @GetMapping(URIPaths.USERS_ID)
     fun getUser(@PathVariable id: UUID): ScimUser {
-        return scimResourceManager.getUser(id) ?: throw ResourceNotFoundException()
+        return scimResourceManager.getUser(id)
+    }
+
+    @PutMapping(URIPaths.USERS_ID)
+    fun replaceUser(
+        @PathVariable id: UUID,
+        @RequestBody user: ScimUser
+    ): ScimUser {
+        return scimResourceManager.replaceUser(id, user)
     }
 
     @PostMapping(URIPaths.USERS)
@@ -38,7 +45,15 @@ class ScimController(private val scimResourceManager: ScimResourceManager) {
 
     @GetMapping(URIPaths.GROUPS_ID)
     fun getGroup(@PathVariable id: UUID): ScimGroup {
-        return scimResourceManager.getGroup(id) ?: throw ResourceNotFoundException()
+        return scimResourceManager.getGroup(id)
+    }
+
+    @PutMapping(URIPaths.GROUPS_ID)
+    fun replaceGroup(
+        @PathVariable id: UUID,
+        @RequestBody group: ScimGroup
+    ): ScimGroup {
+        return scimResourceManager.replaceGroup(id, group)
     }
 
     @PostMapping(URIPaths.GROUPS)

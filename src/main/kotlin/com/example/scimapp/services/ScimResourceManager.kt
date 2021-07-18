@@ -66,7 +66,7 @@ class ScimResourceManager(private val userRepository: UserRepository, val groupR
     }
 
     fun replaceGroup(id: UUID, scimGroup: ScimGroup): ScimGroup {
-        var dbGroup = groupRepository.findByIdOrNull(id) ?: throw ResourceNotFoundException()
+        val dbGroup = groupRepository.findByIdOrNull(id) ?: throw ResourceNotFoundException()
         return groupRepository.save(
             Group(scimGroup).apply { this.id = dbGroup.id }
         ).toScimGroup()

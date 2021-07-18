@@ -8,4 +8,6 @@ object URIPaths {
 
     const val USERS: String = "/Users"
     const val USERS_ID: String = USERS + ID
+
+    const val SERVICE_PROVIDER_CONFIG = "/ServiceProviderConfig"
 }

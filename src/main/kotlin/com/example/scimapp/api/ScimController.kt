@@ -60,4 +60,9 @@ class ScimController(private val scimResourceManager: ScimResourceManager) {
     fun createGroup(@RequestBody dto: ScimGroup): ScimGroup {
         return scimResourceManager.addGroup(dto)
     }
+
+    @GetMapping(URIPaths.SERVICE_PROVIDER_CONFIG)
+    fun getSPConfig(): ScimServiceProviderConfig {
+        return ScimServiceProviderConfig()
+    }
 }

@@ -10,7 +10,7 @@ class ScimUser (
     val schemas: List<String> = listOf("urn:ietf:params:scim:schemas:core:2.0:User"),
     val userName: String,
     val name: Name? = null,
-    val emails: List<Email>,
+    val emails: List<Email> = emptyList(),
     val active: Boolean? = null,
     val externalId: String? = null,
     val groups: List<GroupMembership>? = null
